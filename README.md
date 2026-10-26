@@ -7,7 +7,7 @@
 | Мод | Что делает | Откуда |
 |---|---|---|
 | [Ender Obelisks](https://github.com/stardely62-oss/modhyed) | обелиски для телепортации между точками мира, ярусы дальности, руины | наш, GitHub Releases |
-| [Mage's Legacy](https://github.com/stardely62-oss/mages-legacy) | расы с деревом талантов: Мицелиды, Пастыри, Застывшие | наш, GitHub Releases |
+| [Mage's Legacy](https://github.com/stardely62-oss/mages-legacy) | расы с деревом талантов: Мицелиды, Пастыри, Застывшие, Кровники | наш, GitHub Releases |
 | [JourneyMap](https://modrinth.com/mod/journeymap) | миникарта и полноэкранная карта, обелиски видны на ней | Modrinth, версия 6.0.7 |
 | [Fabric API](https://modrinth.com/mod/fabric-api) | библиотека, нужна всем модам | Modrinth, под твой Fabric Loader |
 
