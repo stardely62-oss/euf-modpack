@@ -1,0 +1,36 @@
+name: pack
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the manifest
+        run: python3 -c "import json; m = json.load(open('modpack.json')); assert m['mods'], 'no mods'; print(len(m['mods']), 'mods')"
+      - name: Check every Modrinth file against its checksum
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, urllib.request
+          for mod in json.load(open('modpack.json'))['mods']:
+              if 'url' in mod:
+                  data = urllib.request.urlopen(urllib.request.Request(mod['url'], headers={'User-Agent': 'euf-modpack-ci'})).read()
+                  assert hashlib.sha512(data).hexdigest() == mod['sha512'], mod['name'] + ': checksum mismatch'
+                  print(mod['name'], 'ok')
+          PY
+      - name: Build the installer zip
+        run: zip -j euf-modpack.zip install-modpack.bat install.ps1 modpack.json README.md
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete pack -y --cleanup-tag || true
+          gh release create pack euf-modpack.zip --title "Сборка euf" --latest \
+            --notes "Установщик сборки: распакуй и запусти install-modpack.bat. Моды: $(python3 -c "import json; print(', '.join(m['name'] for m in json.load(open('modpack.json'))['mods']))")."
