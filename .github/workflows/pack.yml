@@ -33,4 +33,4 @@ jobs:
         run: |
           gh release delete pack -y --cleanup-tag || true
           gh release create pack euf-modpack.zip --title "Сборка euf" --latest \
-            --notes "Установщик сборки: распакуй и запусти install-modpack.bat. Моды: $(python3 -c "import json; print(', '.join(m['name'] for m in json.load(open('modpack.json'))['mods']))")."
+            --notes "Сборка для NeoForge 1.21.1. Установщик: распакуй и запусти install-modpack.bat. Моды: $(python3 -c "import json; print(', '.join(m['name'] for m in json.load(open('modpack.json'))['mods']))")."

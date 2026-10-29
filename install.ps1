@@ -1,12 +1,13 @@
-﻿# Ставит или обновляет всю сборку euf (Fabric 1.20.1) в папку mods TLauncher:
-# Fabric API под твой Fabric Loader и все моды из modpack.json. Лишние старые версии этих модов убирает.
+﻿# Ставит или обновляет всю сборку euf (NeoForge 1.21.1) в папку mods TLauncher:
+# все моды из modpack.json, включая Photon и его библиотеки. Старые версии этих модов и моды прежней
+# Fabric-сборки убирает.
 # Запуск: двойной клик по install-modpack.bat (лежит рядом).
 #   -Stable           брать стабильные релизы наших модов (v*), а не свежие dev-сборки
-#   -VersionName "…"  имя версии в TLauncher (по умолчанию "Fabric 1.20.1")
+#   -VersionName "…"  имя версии NeoForge в TLauncher (по умолчанию ищется сама)
 #   -GameDir "…"      папка игры (по умолчанию %APPDATA%\.minecraft)
 param(
     [switch]$Stable,
-    [string]$VersionName = 'Fabric 1.20.1',
+    [string]$VersionName = '',
     [string]$GameDir = (Join-Path $env:APPDATA '.minecraft')
 )
 
@@ -30,6 +31,18 @@ function Get-Manifest {
     }
 }
 
+# Версия NeoForge из json версии TLauncher, или $null, если это не NeoForge 1.21.1
+function Get-NeoForge($dir) {
+    foreach ($json in Get-ChildItem $dir -Filter '*.json' -ErrorAction SilentlyContinue) {
+        $text = Get-Content $json.FullName -Raw
+        foreach ($pattern in @('net\.neoforged:neoforge:(21\.1\.[0-9]+)', 'fml\.neoForgeVersion"\s*,\s*"(21\.1\.[0-9]+)', 'neoforge-(21\.1\.[0-9]+)')) {
+            $m = [regex]::Match($text, $pattern)
+            if ($m.Success) { return [version]$m.Groups[1].Value }
+        }
+    }
+    return $null
+}
+
 function Remove-Old($mods, $patterns, $keep) {
     foreach ($pattern in $patterns) {
         Get-ChildItem $mods -Filter $pattern | Where-Object { $_.Name -ne $keep } | Remove-Item -Force
@@ -39,11 +52,35 @@ function Remove-Old($mods, $patterns, $keep) {
 try {
     Say "== Сборка euf: установка и обновление ==" Cyan
 
-    # 1. Папка mods: отдельная у версии, если TLauncher так настроен, иначе общая
-    $versionDir = Join-Path $GameDir "versions\$VersionName"
-    if (-not (Test-Path $versionDir)) {
-        throw "Не нашёл версию '$VersionName' в $GameDir\versions. Установи её в TLauncher и запусти один раз."
+    $manifest = Get-Manifest
+
+    # 1. Версия NeoForge 1.21.1 в TLauncher: названная или найденная сама
+    $versionsDir = Join-Path $GameDir 'versions'
+    if ($VersionName) {
+        $versionDir = Join-Path $versionsDir $VersionName
+        if (-not (Test-Path $versionDir)) {
+            throw "Не нашёл версию '$VersionName' в $versionsDir. Установи её в TLauncher и запусти один раз."
+        }
+        $neo = Get-NeoForge $versionDir
+        if (-not $neo) { throw "Версия '$VersionName' не похожа на NeoForge 1.21.1." }
+    } else {
+        $found = @(Get-ChildItem $versionsDir -Directory -ErrorAction SilentlyContinue |
+            ForEach-Object { $n = Get-NeoForge $_.FullName; if ($n) { [pscustomobject]@{ Dir = $_; Neo = $n } } } |
+            Sort-Object Neo -Descending)
+        if ($found.Count -eq 0) {
+            throw "Не нашёл NeoForge 1.21.1 в $versionsDir. Установи в TLauncher версию NeoForge 1.21.1 и запусти её один раз."
+        }
+        $versionDir = $found[0].Dir.FullName
+        $VersionName = $found[0].Dir.Name
+        $neo = $found[0].Neo
     }
+    Say "Версия: $VersionName (NeoForge $neo)"
+    $min = [version]$manifest.neoforge_min
+    if ($neo -lt $min) {
+        throw "NeoForge $neo слишком старый, нужен $min или новее. Поставь в TLauncher NeoForge 1.21.1 поновее."
+    }
+
+    # 2. Папка mods: отдельная у версии, если TLauncher так настроен, иначе общая
     $mods = Join-Path $versionDir 'mods'
     if (-not (Test-Path $mods)) { $mods = Join-Path $GameDir 'mods' }
     New-Item -ItemType Directory -Force -Path $mods | Out-Null
@@ -53,46 +90,19 @@ try {
         Say "Похоже, Minecraft запущен. Закрой игру, иначе старые файлы не удалятся." Yellow
     }
 
-    # 2. Версия Fabric Loader у этой версии TLauncher -> какой Fabric API подходит
-    $loader = $null
-    $json = Get-ChildItem $versionDir -Filter '*.json' | Select-Object -First 1
-    if ($json) {
-        $m = [regex]::Match((Get-Content $json.FullName -Raw), 'net\.fabricmc:fabric-loader:([0-9][0-9.]*)')
-        if ($m.Success) { $loader = [version]$m.Groups[1].Value }
-    }
-    if (-not $loader) {
-        Say "Не смог определить версию Fabric Loader, беру Fabric API для самого старого загрузчика." Yellow
-        $loader = [version]'0.14.21'
-    }
-    if ($loader -lt [version]'0.14.21') {
-        throw "Fabric Loader $loader слишком старый, нужен 0.14.21 или новее. Выбери в TLauncher версию Fabric поновее."
-    }
-    if ($loader -ge [version]'0.16.10') { $fapi = '0.92.12+1.20.1' }
-    elseif ($loader -ge [version]'0.15.6') { $fapi = '0.92.2+1.20.1' }
-    else { $fapi = '0.91.0+1.20.1' }
-    Say "Fabric Loader $loader -> Fabric API $fapi"
-
-    $fapiName = "fabric-api-$fapi.jar"
-    if (Test-Path (Join-Path $mods $fapiName)) {
-        Say "Fabric API уже стоит."
-    } else {
-        $query = 'game_versions=' + [uri]::EscapeDataString('["1.20.1"]') + '&loaders=' + [uri]::EscapeDataString('["fabric"]')
-        $versions = Invoke-RestMethod "https://api.modrinth.com/v2/project/fabric-api/version?$query" -Headers $Headers
-        $v = $versions | Where-Object { $_.version_number -eq $fapi } | Select-Object -First 1
-        if (-not $v) { throw "Fabric API $fapi не найден на Modrinth." }
-        $file = $v.files | Where-Object { $_.primary } | Select-Object -First 1
-        if (-not $file) { $file = $v.files[0] }
-        Get-ChildItem $mods -Filter 'fabric-api-*.jar' | Remove-Item -Force
-        Invoke-WebRequest $file.url -OutFile (Join-Path $mods $fapiName) -Headers $Headers -UseBasicParsing
-        Say "Fabric API $fapi установлен." Green
+    # Моды прежней Fabric-сборки NeoForge не загрузит, убираем их
+    foreach ($pattern in $manifest.remove) {
+        Get-ChildItem $mods -Filter $pattern | ForEach-Object {
+            Remove-Item $_.FullName -Force
+            Say "Убран старый мод: $($_.Name)" Yellow
+        }
     }
 
     # 3. Моды сборки
-    $manifest = Get-Manifest
     foreach ($mod in $manifest.mods) {
         if ($mod.github) {
             # Наш мод: свежая dev-сборка или последний стабильный релиз из GitHub Releases
-            $api = if ($Stable) { "https://api.github.com/repos/$($mod.github)/releases/latest" } else { "https://api.github.com/repos/$($mod.github)/releases/tags/dev" }
+            $api = if ($Stable) { "https://api.github.com/repos/$($mod.github)/releases/latest" } else { "https://api.github.com/repos/$($mod.github)/releases/tags/$(if ($mod.devTag) { $mod.devTag } else { 'dev' })" }
             $release = Invoke-RestMethod $api -Headers $Headers
             $asset = $release.assets | Where-Object { $_.name -like $mod.asset -and $_.name -notlike '*-sources*' } | Select-Object -First 1
             if (-not $asset) { throw "$($mod.name): в релизе '$($release.name)' нет jar-файла." }

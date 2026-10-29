@@ -1,25 +1,43 @@
 {
   "name": "euf-modpack",
-  "minecraft": "1.20.1",
-  "loader": "fabric",
+  "minecraft": "1.21.1",
+  "loader": "neoforge",
+  "neoforge_min": "21.1.217",
+  "remove": ["ender-obelisks-*.jar", "modhyed-*.jar", "fabric-api-*.jar", "journeymap-fabric-*.jar"],
   "mods": [
-    {
-      "name": "Ender Obelisks",
-      "github": "stardely62-oss/modhyed",
-      "asset": "ender-obelisks-*.jar",
-      "replaces": ["ender-obelisks-*.jar", "modhyed-*.jar"]
-    },
     {
       "name": "Mage's Legacy",
       "github": "stardely62-oss/mages-legacy",
+      "devTag": "neo-dev",
       "asset": "mages-legacy-*.jar",
       "replaces": ["mages-legacy-*.jar"]
     },
     {
+      "name": "LDLib2",
+      "url": "https://cdn.modrinth.com/data/B1CBVXHX/versions/s7Uru4V0/ldlib2-neoforge-1.21.1-2.2.44-all.jar",
+      "file": "ldlib2-neoforge-1.21.1-2.2.44-all.jar",
+      "sha512": "232e7e5ffcadbcd660894c055d7f53443c7b9105658229875b936a8c5eb8587f3ed9ef51b2897084709d4cd2873172ee4e34101e1e8c88aade1d837c63c67883",
+      "replaces": ["ldlib2-*.jar"]
+    },
+    {
+      "name": "KilaGraph",
+      "url": "https://cdn.modrinth.com/data/zZO0N3W6/versions/KwiKbOzM/kilagraph-neoforge-1.21.1-21.1.0.16.jar",
+      "file": "kilagraph-neoforge-1.21.1-21.1.0.16.jar",
+      "sha512": "2e3c473cbaeb708b311374cf180af683dd81106232ee716037043273434976ba22179ea6b405c24c714f045105cd7e1a4480b2552720061e43bf346d90294598",
+      "replaces": ["kilagraph-*.jar"]
+    },
+    {
+      "name": "Photon",
+      "url": "https://cdn.modrinth.com/data/gzevkJbM/versions/XQsukdXk/photon-neoforge-1.21.1-2.2.9-all.jar",
+      "file": "photon-neoforge-1.21.1-2.2.9-all.jar",
+      "sha512": "b9b726e3c036ac90074ffbe7cbdae68534067d012932e40bba6873a4d923ec1e18df6aa361e9ac05d6c7cb5e359bd57543e6250022a4a1b0e652c41be27bf6b2",
+      "replaces": ["photon-*.jar"]
+    },
+    {
       "name": "JourneyMap",
-      "url": "https://cdn.modrinth.com/data/lfHFW1mp/versions/Dk3AKHGe/journeymap-fabric-1.20.1-6.0.7.jar",
-      "file": "journeymap-fabric-1.20.1-6.0.7.jar",
-      "sha512": "9a6b9bbdf1d0e7532ede179cb47ca07626d9df3a27d3bb4472b77dfa2ef010ccd2bea40a3f47f048ffe095d103a42dd492b1cc43c0f06349c0e67933b866692e",
+      "url": "https://cdn.modrinth.com/data/lfHFW1mp/versions/CtFE7hwT/journeymap-neoforge-1.21.1-6.0.9.jar",
+      "file": "journeymap-neoforge-1.21.1-6.0.9.jar",
+      "sha512": "8900ee4cdb7d1ffb6559decdeec84ad479d04b2e7b01a60be9f6e328809af2bfd7a80077b7da0e49bc96261fe8fe274ba33c62f6c9f65302c783ed823c4ff746",
       "replaces": ["journeymap-*.jar"]
     }
   ]
