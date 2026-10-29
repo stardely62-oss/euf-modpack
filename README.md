@@ -7,8 +7,8 @@
 | Мод | Что делает | Откуда |
 |---|---|---|
 | [Mage's Legacy](https://github.com/stardely62-oss/mages-legacy) | легенда о безымянном маге и выбор одной из восьми рас. Пробуждены Пустотники, остальные расы пока спят | наш, GitHub Releases (`neo-dev`) |
-| [Photon](https://modrinth.com/mod/photon-editor) | движок эффектов и анимаций, на нём строятся эффекты Mage's Legacy | Modrinth, 2.2.9 |
-| [LDLib2](https://modrinth.com/mod/ldlib) и [KilaGraph](https://modrinth.com/mod/kilagraph) | библиотеки, которые нужны Photon | Modrinth |
+| [Veil](https://modrinth.com/mod/veil) | шейдеры, свечение и постобработка для эффектов Mage's Legacy (несовместим с Embeddium/Rubidium) | Modrinth, 4.5.2 |
+| [GeckoLib](https://modrinth.com/mod/geckolib) | анимированные 3D-модели для эффектов | Modrinth, 4.9.3 |
 
 Точный список с версиями лежит в [`modpack.json`](modpack.json). Установщик берёт его отсюда при каждом запуске, так что новые моды сборки приходят сами.
 
