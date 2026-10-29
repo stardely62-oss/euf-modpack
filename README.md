@@ -9,7 +9,6 @@
 | [Mage's Legacy](https://github.com/stardely62-oss/mages-legacy) | легенда о безымянном маге и выбор одной из восьми рас. Пока все расы спят, их механики делаются заново | наш, GitHub Releases (`neo-dev`) |
 | [Photon](https://modrinth.com/mod/photon-editor) | движок эффектов и анимаций, на нём строятся эффекты Mage's Legacy | Modrinth, 2.2.9 |
 | [LDLib2](https://modrinth.com/mod/ldlib) и [KilaGraph](https://modrinth.com/mod/kilagraph) | библиотеки, которые нужны Photon | Modrinth |
-| [JourneyMap](https://modrinth.com/mod/journeymap) | миникарта и полноэкранная карта | Modrinth, 6.0.9 |
 
 Точный список с версиями лежит в [`modpack.json`](modpack.json). Установщик берёт его отсюда при каждом запуске, так что новые моды сборки приходят сами.
 
@@ -19,7 +18,7 @@
 2. Скачай [`euf-modpack.zip`](https://github.com/stardely62-oss/euf-modpack/releases/latest/download/euf-modpack.zip), распакуй куда угодно и запусти `install-modpack.bat`.
 3. Запускай в TLauncher ту версию NeoForge, которую назовёт установщик.
 
-Для обновления запусти `install-modpack.bat` ещё раз: он докачает новые версии и уберёт старые. Моды прежней сборки на Fabric 1.20.1 (Ender Obelisks, Fabric API, JourneyMap для Fabric) он тоже удаляет, если найдёт их в папке модов.
+Для обновления запусти `install-modpack.bat` ещё раз: он докачает новые версии и уберёт старые. Моды прежней сборки на Fabric 1.20.1 (Ender Obelisks, Fabric API) и JourneyMap, который из сборки убран, он тоже удаляет, если найдёт их в папке модов.
 
 > Переходишь со старой сборки на Fabric 1.20.1? Скачай новый `euf-modpack.zip`: старый установщик умеет ставить только в Fabric.
 
@@ -30,7 +29,7 @@
 
 ## Клавиши
 
-**JourneyMap:** **J** — карта, **B** — новая метка. Клавиши Mage's Legacy появятся вместе с механиками рас.
+Клавиши Mage's Legacy появятся вместе с механиками рас.
 
 ## Для разработки
 

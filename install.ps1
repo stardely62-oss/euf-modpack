@@ -26,15 +26,15 @@ function Get-Manifest {
         return Invoke-RestMethod "https://raw.githubusercontent.com/$PackRepo/main/modpack.json" -Headers $Headers
     } catch {
         $local = Join-Path $PSScriptRoot 'modpack.json'
-        if (Test-Path $local) { return Get-Content $local -Raw -Encoding UTF8 | ConvertFrom-Json }
+        if (Test-Path -LiteralPath $local) { return Get-Content -LiteralPath $local -Raw -Encoding UTF8 | ConvertFrom-Json }
         throw "Не удалось получить список модов сборки."
     }
 }
 
 # Версия NeoForge из json версии TLauncher, или $null, если это не NeoForge 1.21.1
 function Get-NeoForge($dir) {
-    foreach ($json in Get-ChildItem $dir -Filter '*.json' -ErrorAction SilentlyContinue) {
-        $text = Get-Content $json.FullName -Raw
+    foreach ($json in Get-ChildItem -LiteralPath $dir -Filter '*.json' -ErrorAction SilentlyContinue) {
+        $text = Get-Content -LiteralPath $json.FullName -Raw
         foreach ($pattern in @('net\.neoforged:neoforge:(21\.1\.[0-9]+)', 'fml\.neoForgeVersion"\s*,\s*"(21\.1\.[0-9]+)', 'neoforge-(21\.1\.[0-9]+)')) {
             $m = [regex]::Match($text, $pattern)
             if ($m.Success) { return [version]$m.Groups[1].Value }
@@ -45,7 +45,7 @@ function Get-NeoForge($dir) {
 
 function Remove-Old($mods, $patterns, $keep) {
     foreach ($pattern in $patterns) {
-        Get-ChildItem $mods -Filter $pattern | Where-Object { $_.Name -ne $keep } | Remove-Item -Force
+        Get-ChildItem -LiteralPath $mods -Filter $pattern | Where-Object { $_.Name -ne $keep } | ForEach-Object { Remove-Item -LiteralPath $_.FullName -Force }
     }
 }
 
@@ -58,13 +58,13 @@ try {
     $versionsDir = Join-Path $GameDir 'versions'
     if ($VersionName) {
         $versionDir = Join-Path $versionsDir $VersionName
-        if (-not (Test-Path $versionDir)) {
+        if (-not (Test-Path -LiteralPath $versionDir)) {
             throw "Не нашёл версию '$VersionName' в $versionsDir. Установи её в TLauncher и запусти один раз."
         }
         $neo = Get-NeoForge $versionDir
         if (-not $neo) { throw "Версия '$VersionName' не похожа на NeoForge 1.21.1." }
     } else {
-        $found = @(Get-ChildItem $versionsDir -Directory -ErrorAction SilentlyContinue |
+        $found = @(Get-ChildItem -LiteralPath $versionsDir -Directory -ErrorAction SilentlyContinue |
             ForEach-Object { $n = Get-NeoForge $_.FullName; if ($n) { [pscustomobject]@{ Dir = $_; Neo = $n } } } |
             Sort-Object Neo -Descending)
         if ($found.Count -eq 0) {
@@ -82,8 +82,8 @@ try {
 
     # 2. Папка mods: отдельная у версии, если TLauncher так настроен, иначе общая
     $mods = Join-Path $versionDir 'mods'
-    if (-not (Test-Path $mods)) { $mods = Join-Path $GameDir 'mods' }
-    New-Item -ItemType Directory -Force -Path $mods | Out-Null
+    if (-not (Test-Path -LiteralPath $mods)) { $mods = Join-Path $GameDir 'mods' }
+    [IO.Directory]::CreateDirectory($mods) | Out-Null
     Say "Папка модов: $mods"
 
     if (Get-Process -Name javaw, java -ErrorAction SilentlyContinue) {
@@ -92,8 +92,8 @@ try {
 
     # Моды прежней Fabric-сборки NeoForge не загрузит, убираем их
     foreach ($pattern in $manifest.remove) {
-        Get-ChildItem $mods -Filter $pattern | ForEach-Object {
-            Remove-Item $_.FullName -Force
+        Get-ChildItem -LiteralPath $mods -Filter $pattern | ForEach-Object {
+            Remove-Item -LiteralPath $_.FullName -Force
             Say "Убран старый мод: $($_.Name)" Yellow
         }
     }
@@ -115,19 +115,20 @@ try {
             $url = $mod.url
             $sha = $mod.sha512
         }
-        if (Test-Path (Join-Path $mods $name)) {
+        if (Test-Path -LiteralPath (Join-Path $mods $name)) {
             Say "$($mod.name): уже последней версии ($name)" Green
             Remove-Old $mods $mod.replaces $name
             continue
         }
         $tmp = Join-Path $env:TEMP $name
         Invoke-WebRequest $url -OutFile $tmp -Headers $Headers -UseBasicParsing
-        if ($sha -and ((Get-FileHash $tmp -Algorithm SHA512).Hash.ToLower() -ne $sha.ToLower())) {
-            Remove-Item $tmp -Force
+        if ($sha -and ((Get-FileHash -LiteralPath $tmp -Algorithm SHA512).Hash.ToLower() -ne $sha.ToLower())) {
+            Remove-Item -LiteralPath $tmp -Force
             throw "$($mod.name): файл скачался повреждённым (контрольная сумма не совпала). Попробуй ещё раз."
         }
         Remove-Old $mods $mod.replaces $name
-        Move-Item $tmp (Join-Path $mods $name) -Force
+        [IO.File]::Copy($tmp, (Join-Path $mods $name), $true)
+        Remove-Item -LiteralPath $tmp -Force
         Say "$($mod.name): установлен $name" Green
     }
 
