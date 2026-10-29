@@ -6,7 +6,7 @@
 
 | Мод | Что делает | Откуда |
 |---|---|---|
-| [Mage's Legacy](https://github.com/stardely62-oss/mages-legacy) | легенда о безымянном маге и выбор одной из восьми рас. Пока все расы спят, их механики делаются заново | наш, GitHub Releases (`neo-dev`) |
+| [Mage's Legacy](https://github.com/stardely62-oss/mages-legacy) | легенда о безымянном маге и выбор одной из восьми рас. Пробуждены Пустотники, остальные расы пока спят | наш, GitHub Releases (`neo-dev`) |
 | [Photon](https://modrinth.com/mod/photon-editor) | движок эффектов и анимаций, на нём строятся эффекты Mage's Legacy | Modrinth, 2.2.9 |
 | [LDLib2](https://modrinth.com/mod/ldlib) и [KilaGraph](https://modrinth.com/mod/kilagraph) | библиотеки, которые нужны Photon | Modrinth |
 
@@ -29,7 +29,11 @@
 
 ## Клавиши
 
-Клавиши Mage's Legacy появятся вместе с механиками рас.
+**Mage's Legacy:** **K** — легенда и выбор расы (пока раса не выбрана). Способности: **R**, **V**, **H**; **Z** и **левый Alt** оставлены под Пробуждения.
+
+| Раса | R | V | H |
+|---|---|---|---|
+| Пустотники | Пустотный шаг (с 3 ур.) | Повышенная гравитация (с 5 ур.) | Карман (с 1 ур.) |
 
 ## Для разработки
 
