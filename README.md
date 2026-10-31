@@ -6,7 +6,7 @@
 
 | Мод | Что делает | Откуда |
 |---|---|---|
-| [Mage's Legacy](https://github.com/stardely62-oss/mages-legacy) | легенда о безымянном маге и выбор одной из восьми рас. Пробуждены Пустотники, остальные расы пока спят | наш, GitHub Releases (`neo-dev`) |
+| [Mage's Legacy](https://github.com/stardely62-oss/mages-legacy) | легенда о безымянном маге и выбор одной из восьми рас. Пробуждены Пустотники и Мицелиды, остальные расы пока спят | наш, GitHub Releases (`neo-dev`) |
 | [Veil](https://modrinth.com/mod/veil) | шейдеры, свечение и постобработка для эффектов Mage's Legacy (несовместим с Embeddium/Rubidium) | Modrinth, 4.5.2 |
 | [GeckoLib](https://modrinth.com/mod/geckolib) | анимированные 3D-модели для эффектов | Modrinth, 4.9.3 |
 | [Perfect Advancements](https://www.curseforge.com/minecraft/mc-mods/perfect-advancements) | современное меню достижений: вкладки, свободная камера, масштаб, панель подробностей (только клиент) | CurseForge, 1.0.0 (скачивается с CDN CurseForge) |
