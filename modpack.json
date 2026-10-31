@@ -39,6 +39,15 @@
       "replaces": [
         "geckolib-*.jar"
       ]
+    },
+    {
+      "name": "Perfect Advancements",
+      "url": "https://mediafilez.forgecdn.net/files/8057/245/perfectadvancements-1.21.1-1.0.0.jar",
+      "file": "perfectadvancements-1.21.1-1.0.0.jar",
+      "sha512": "21de9eafc96ed7696c6b73d5a77c5d0676948935b3586a5a872b0aa7827ad0d1244ba1546fd42db17ee5ec45c2e244b2ba03c73c4549aafed9691f5cee734106",
+      "replaces": [
+        "perfectadvancements-*.jar"
+      ]
     }
   ]
 }
