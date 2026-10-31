@@ -9,13 +9,12 @@
 | [Mage's Legacy](https://github.com/stardely62-oss/mages-legacy) | легенда о безымянном маге и выбор одной из восьми рас. Пробуждены Пустотники и Мицелиды, остальные расы пока спят | наш, GitHub Releases (`neo-dev`) |
 | [Veil](https://modrinth.com/mod/veil) | шейдеры, свечение и постобработка для эффектов Mage's Legacy (несовместим с Embeddium/Rubidium) | Modrinth, 4.5.2 |
 | [GeckoLib](https://modrinth.com/mod/geckolib) | анимированные 3D-модели для эффектов | Modrinth, 4.9.3 |
-| [Perfect Advancements](https://www.curseforge.com/minecraft/mc-mods/perfect-advancements) | современное меню достижений: вкладки, свободная камера, масштаб, панель подробностей (только клиент) | CurseForge, 1.0.0 (скачивается с CDN CurseForge) |
 
 Точный список с версиями лежит в [`modpack.json`](modpack.json). Установщик берёт его отсюда при каждом запуске, так что новые моды сборки приходят сами.
 
 ## Установка (TLauncher)
 
-1. В TLauncher выбери **NeoForge 1.21.1** (21.1.228 или новее — этого требует Perfect Advancements) и запусти один раз до главного меню.
+1. В TLauncher выбери **NeoForge 1.21.1** (21.1.217 или новее) и запусти один раз до главного меню.
 2. Скачай [`euf-modpack.zip`](https://github.com/stardely62-oss/euf-modpack/releases/latest/download/euf-modpack.zip), распакуй куда угодно и запусти `install-modpack.bat`.
 3. Запускай в TLauncher ту версию NeoForge, которую назовёт установщик.
 
