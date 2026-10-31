@@ -2,7 +2,7 @@
   "name": "euf-modpack",
   "minecraft": "1.21.1",
   "loader": "neoforge",
-  "neoforge_min": "21.1.217",
+  "neoforge_min": "21.1.228",
   "remove": [
     "ender-obelisks-*.jar",
     "fabric-api-*.jar",

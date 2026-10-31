@@ -15,7 +15,7 @@
 
 ## Установка (TLauncher)
 
-1. В TLauncher выбери **NeoForge 1.21.1** (21.1.217 или новее) и запусти один раз до главного меню.
+1. В TLauncher выбери **NeoForge 1.21.1** (21.1.228 или новее — этого требует Perfect Advancements) и запусти один раз до главного меню.
 2. Скачай [`euf-modpack.zip`](https://github.com/stardely62-oss/euf-modpack/releases/latest/download/euf-modpack.zip), распакуй куда угодно и запусти `install-modpack.bat`.
 3. Запускай в TLauncher ту версию NeoForge, которую назовёт установщик.
 
